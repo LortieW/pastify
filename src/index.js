@@ -18,18 +18,35 @@ function RootContainer(props) {
 
 function MainView(props) {
     return <div className="main-view">
-        <div className="top-bar-filler"></div>
-        <div>Content</div>
+        <div className="top-bar-filler" />
+        <div className="section-view">
+            <CustomSection name="Recently played"/>
+            <CustomSection name="Jump back in"/>
+            <CustomSection name="Your heavy rotation"/>
+            <CustomSection name="Made for {user.name}"/>
+            <CustomSection name="Throwback"/>
+            <CustomSection name="New releases for you"/>
+            <CustomSection name="Your favorite albums and s.artistongs"/>
+            <CustomSection name="For fans of {user.followed.artist.name}"/>
+            <CustomSection name="For fans of {user.followed.style.name}"/>
+            <CustomSection name="Popular new releases"/>
+        </div>
     </div>
+}
+
+function CustomSection(props) {
+    return <section className="custom-section">
+        {props.name}
+    </section>
 }
 
 function Navbar(props) {
     return <div className="nav-bar">
         <nav>
             <div>Banner</div>
-            <div>NavMenu</div>
-            <div>NavPlaylist</div>
-            <div>AppDownload</div>
+            <div>Menu</div>
+            <div>Playlists</div>
+            <div>Install App</div>
         </nav>
     </div>
 }
