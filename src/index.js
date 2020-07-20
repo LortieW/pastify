@@ -127,7 +127,7 @@ function Navbar(props) {
                 </a>
               </div>
             </div>
-            <hr />
+            <hr className="navbar-divider" />
             <div className="navbar-playlists-user">
               <div className="navbar-playlists-size">
                 <div className="navbar-playlists-scroll">

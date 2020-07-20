@@ -94,6 +94,13 @@ body {
   padding-top: 24px;
 }
 
+.navbar-divider {
+  border: none;
+  background-color: #282828;
+  margin: 8px 24px;
+  height: 1px;
+}
+
 .navbar-link {
   display: flex;
   color: rgba(179, 179, 179, 0.8);
