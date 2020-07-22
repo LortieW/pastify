@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
+import Spotify from "spotify-web-api-js";
 import "./index.css";
+
+const spotifyWebApi = new Spotify();
 
 const sectionTitles = [
   "Recently played",
@@ -43,7 +46,7 @@ const menuTitles = [
 
 // Review implementation - Should follow same pattern accross each elements
 const listMenuTitles = menuTitles.map((menu) => (
-  <li>
+  <li className="navbar-item">
     <a className="navbar-link" href="/">
       <div>
         <svg viewBox={menu.viewBox} width="24" height="24">
@@ -62,17 +65,6 @@ const playlistButton = {
   path: "m28 20h-8v8h-4v-8h-8v-4h8v-8h4v8h8v4z",
 };
 
-function RootContainer(props) {
-  return (
-    <div className="root-container">
-      <Topbar />
-      <MainView />
-      <Navbar />
-      <Bottombar />
-    </div>
-  );
-}
-
 function MainView(props) {
   return (
     <div className="main-view">
@@ -86,13 +78,41 @@ function CustomSection(props) {
   return <section className="custom-section">{props.name}</section>;
 }
 
-// clean function - getting too long...
+function playlistItems(items) {
+  return items.map((item) => {
+    return <li>{item.name}</li>;
+  });
+}
+
+function usePlaylist() {
+  const [playlists, setPlaylists] = useState(null);
+
+  useEffect(() => {
+    spotifyWebApi.getUserPlaylists().then((response) => {
+      setPlaylists(response.items);
+    });
+  });
+
+  return playlists;
+}
+
+function PlaylistView() {
+  const playlists = usePlaylist();
+
+  if (playlists === null) {
+    return <div>{"Fetching playlist..."}</div>;
+  }
+
+  return <ul>{playlistItems(playlists)}</ul>;
+}
+
+// this function is getting too long...
 function Navbar(props) {
   return (
     <div className="navbar">
       <nav className="navbar-content">
         <div className="navbar-banner">
-          <a href="/">
+          <a href="http://localhost:8888/">
             <svg viewBox="0 0 1134 340" className="navbar-logo-banner">
               <title>Spotify</title>
               <path
@@ -121,7 +141,7 @@ function Navbar(props) {
                 </button>
               </div>
               <div>
-                <a className="navbar-link navbar-button-link" href="/">
+                <a className="navbar-link navbar-playlists-link" href="/">
                   <div className="navbar-button-svg"></div>
                   <span className="navbar-span">Liked Songs</span>
                 </a>
@@ -130,11 +150,7 @@ function Navbar(props) {
             <hr className="navbar-divider" />
             <div className="navbar-playlists-user">
               <div className="navbar-playlists-size">
-                <div className="navbar-playlists-scroll">
-                  <ul>
-                    <li>user.playlists</li>
-                  </ul>
-                </div>
+                <div className="navbar-playlists-scroll">{PlaylistView()}</div>
               </div>
             </div>
           </div>
@@ -162,6 +178,39 @@ function Bottombar(props) {
       <div>BottomRight</div>
       <div>BottomCenter</div>
       <div>BottomLeft</div>
+    </div>
+  );
+}
+
+/**
+ * Taken from spotify's server authentication exemple
+ * Obtains parameters from the hash of the URL
+ * @return Object
+ */
+function getHashParams() {
+  var hashParams = {};
+  var e,
+    r = /([^&;=]+)=?([^&;]*)/g,
+    q = window.location.hash.substring(1);
+  while ((e = r.exec(q))) {
+    hashParams[e[1]] = decodeURIComponent(e[2]);
+  }
+  return hashParams;
+}
+
+function RootContainer(props) {
+  const params = getHashParams();
+
+  if (params.access_token) {
+    spotifyWebApi.setAccessToken(params.access_token);
+  }
+
+  return (
+    <div className="root-container">
+      <Topbar />
+      <MainView />
+      <Navbar token={params.access_token} />
+      <Bottombar />
     </div>
   );
 }

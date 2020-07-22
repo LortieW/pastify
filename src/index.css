@@ -83,10 +83,6 @@ body {
   fill: #000;
 }
 
-.navbar-button-link {
-  padding: 5px 24px;
-}
-
 .navbar-content {
   display: flex;
   flex-direction: column;
@@ -101,6 +97,10 @@ body {
   height: 1px;
 }
 
+.navbar-item {
+  padding: 0px 8px;
+}
+
 .navbar-link {
   display: flex;
   color: rgba(179, 179, 179, 0.8);
@@ -109,7 +109,6 @@ body {
   line-height: 16px;
   letter-spacing: normal;
   text-decoration: none;
-  padding: 0px 8px;
 }
 
 .navbar-link:hover {
@@ -145,6 +144,10 @@ body {
   line-height: 16px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+.navbar-playlists-link {
+  padding: 5px 24px;
 }
 
 .navbar-playlists-scroll {
