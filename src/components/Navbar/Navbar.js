@@ -1,7 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Spotify from "spotify-web-api-js";
 
-export const spotifyWebApi = new Spotify();
+/*************************************************/
+const spotifyWebApi = new Spotify();
+
+/**
+ * Taken from spotify's server authentication exemple
+ * Obtains parameters from the hash of the URL
+ * @return Object
+ */
+function getHashParams() {
+  var hashParams = {};
+  var e,
+    r = /([^&;=]+)=?([^&;]*)/g,
+    q = window.location.hash.substring(1);
+  while ((e = r.exec(q))) {
+    hashParams[e[1]] = decodeURIComponent(e[2]);
+  }
+  return hashParams;
+}
+/*************************************************/
 
 const menuTitles = [
   {
@@ -58,7 +76,7 @@ function usePlaylist() {
     spotifyWebApi.getUserPlaylists().then((response) => {
       setPlaylists(response.items);
     });
-  });
+  }, []);
 
   return playlists;
 }
@@ -71,22 +89,6 @@ function PlaylistView() {
   }
 
   return <ul>{playlistItems(playlists)}</ul>;
-}
-
-/**
- * Taken from spotify's server authentication exemple
- * Obtains parameters from the hash of the URL
- * @return Object
- */
-function getHashParams() {
-  var hashParams = {};
-  var e,
-    r = /([^&;=]+)=?([^&;]*)/g,
-    q = window.location.hash.substring(1);
-  while ((e = r.exec(q))) {
-    hashParams[e[1]] = decodeURIComponent(e[2]);
-  }
-  return hashParams;
 }
 
 // this function is getting too long...

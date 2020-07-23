@@ -8,8 +8,6 @@ import intializeSpotifyWebApi from "./auth/spotify-api";
 import "./index.css";
 
 function RootContainer(props) {
-  intializeSpotifyWebApi();
-
   return (
     <div className="root-container">
       <Topbar />
